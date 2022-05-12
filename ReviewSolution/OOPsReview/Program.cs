@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using OOPsReview.Data;
+
+// fully qualified data member
+// OOPsReview.Data.SupervisoryLevel item = new SupervisoryLevel();
+SupervisoryLevel item = new SupervisoryLevel();
