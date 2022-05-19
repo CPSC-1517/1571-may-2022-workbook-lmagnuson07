@@ -86,7 +86,11 @@ namespace OOPsReview.Data
             get { return _Years; }
             set 
             { 
-                if(value < 0)
+                /*if(value < 0)
+                {
+                    throw new ArgumentOutOfRangeException($"Years of {value} is invalid. Must be 0 or greater");
+                }*/
+                if (!Utilities.IsZeropositive(value))
                 {
                     throw new ArgumentOutOfRangeException($"Years of {value} is invalid. Must be 0 or greater");
                 }
@@ -127,8 +131,8 @@ namespace OOPsReview.Data
             Level = SupervisoryLevel.TeamMember;
             Title = "Unknown";
         }
-
-        public Employment(string title, double years, SupervisoryLevel level)
+        // Greedy Constructor
+        public Employment(string title, SupervisoryLevel level, double years = 0.0)
         {
             // Constructor body 
             // a) a parameter for each property 
@@ -136,13 +140,51 @@ namespace OOPsReview.Data
             // c) validation for public readonly data members MUST be doner here 
             // d) validation for properties with a private set CAN be done here if not done in the property
 
+            // default parameters
+
+            // WHY? it allows the programmer to use your constructor/method without having to specify all arguments in the call to your constructor/method 
+
+            // location: end of parameter list
+            // How many: As many as you wish
+            // Values for your default parameters must be a valid value
+            // position and order of spceified default parameters are important when the programmer uses the constructor/method.
+            // Default parameters CAN be skipped, HOWEVER, you still must account for the skipped parameter in your argument call list using commas 
+            // by giving the default parameter an argument value on the call, the constructor/method default value is overridden
+
+            // Syntax: datatype parametername = default value 
+            // Example: years on this constructor is a default parameter
+
+            // Example: skipped defaults (3 default parameters, second one skipped.
+            //      ...(string requiredparam, int requiredparam, int default = 0, int default2 = 0, int default3 = 1)
+            // call: ...("required string", 25, 10, , 5) default2 was skipped 
             Title = title;
             Level = level;
             Years = years; // eventually the data will be placed in _Years
         }
 
-        // Greedy Constructor
+        // Behaviours (aka methods) 
+        // a behaviour is any method in your class
+        // behaviours can be private (for use by the class only); public (for use by the outside user)
+        // all rules about methods are in effect 
 
+        // a special method may be placed may be placed in your class to reflect the data stored by the instance (object) based on this class definiton
+        // this method is part of the system software and can be overriden by your own version of the method
 
+        public override string ToString()
+        {
+            // this string is known as a "comma separated values (csv)" string
+            // this string uses the get; of the property
+            return $"{Title},{Level},{Years}";
+        }
+
+        public void SetEmplyeeResponsibilityLevel(SupervisoryLevel level)
+        {
+            // this method, in this example would not be necessary as the access directly to Level (property) is public (set; )
+            // HOWEVER: If the Level property had a private mutator, the outside user would NOT have direct access to changing the property
+            // THEREFORE: a method (besides the constructor) would need to be supplied to allow the outside user the ability to alter the property value (if they wanted)
+            
+            // this assignment uses the set; of the property
+            Level = level; 
+        }
     }
 }
