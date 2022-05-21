@@ -10,7 +10,7 @@ namespace ReviewUnitTests
         [TestMethod]
         public void CreatingEmployment_GoodDefault_EmploymentMade()
         {
-            
+            // internal setup of data row
             //Arrange
             string expectedTitle = "Unknown";
             SupervisoryLevel expectedLevel = SupervisoryLevel.TeamMember;
@@ -106,6 +106,23 @@ namespace ReviewUnitTests
             {
                 Assert.Fail($"Unexpected exception of type {ex.GetType()} caught {ex.Message}");
             }
+        }
+        [TestMethod]
+        [DataRow(SupervisoryLevel.Entry)]
+        //[DataRow("Boss ", SupervisoryLevel.Entry, 25.2)]
+        public void Employment_SetSupervisoryLevel_GoodSet(SupervisoryLevel level)
+        {
+
+            // three parts to the set
+            // arange (setup of data)
+            Employment employment = new Employment("Boss", SupervisoryLevel.DepartmentHead, 3.5);
+
+            // act (call the method for testing)
+            employment.SetEmplyeeResponsibilityLevel(level);
+
+            // assess (check for success)
+            Assert.IsTrue(employment.Level==level, $"Employment level of {employment.Level} is incorrect, should be {level}.");
+
         }
     }
 }
