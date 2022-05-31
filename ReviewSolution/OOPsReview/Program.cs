@@ -58,6 +58,11 @@ me = CreatePerson(Job, Address);
 
 // Access (check your results)
 Console.WriteLine($"{me.FirstName} {me.LastName} lives at {me.Address.ToString()} having a job count of {me.NumberOfPositions}");
+Console.WriteLine("\nJobs:\n");
+foreach (var item in me.EmploymentPositions)
+{
+    Console.WriteLine(item.ToString());
+}
 
 void CreateJob(ref Employment job)
 {
@@ -98,7 +103,25 @@ ResidentAddress CreateAddress()
 
 Person CreatePerson(Employment job, ResidentAddress address)
 {
-    Person me = new Person("Don", "Welch", address, null);
-    me.AddEmployment(job);
+    //Person me = new Person("Don", "Welch", address, null);
+
+    // one could add the job(s) to the instance of Person (me) after the instance is created via the behavior AddEmployment(Employment emp)
+
+    // or 
+
+    // one coule crate a List<T> and add to the list<T> before creating the person instance
+    List<Employment> employments = new List<Employment>();
+    //me.AddEmployment(job); // add an element to the List<T>
+    employments.Add(job);
+    Person me = new Person("Don", "Welch", address, employments); // using the greedy constructor 
+
+    // create additonal jobs and load to Person 
+    Employment employment = new Employment("New Hire", SupervisoryLevel.Entry, 0.5);
+    me.AddEmployment(employment);
+    employment = new Employment("Team Head", SupervisoryLevel.TeamLeader, 5.2);
+    me.AddEmployment(employment);
+    employment = new Employment("Department IT head", SupervisoryLevel.DepartmentHead, 6.8);
+    me.AddEmployment(employment);
+
     return me;
 }
