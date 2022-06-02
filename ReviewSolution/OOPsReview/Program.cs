@@ -64,6 +64,12 @@ foreach (var item in me.EmploymentPositions)
     Console.WriteLine(item.ToString());
 }
 
+// using Employment.Parse
+
+string theRecord = "Boss,Owner,5.5";
+Employment theParsedRecord = Employment.Parse(theRecord);
+Console.WriteLine(theParsedRecord.ToString());
+
 void CreateJob(ref Employment job)
 {
     // since the class MAY throw exceptions, you should have user friendly error handling
