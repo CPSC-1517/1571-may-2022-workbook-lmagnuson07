@@ -249,5 +249,55 @@ namespace OOPsReview.Data
                         (SupervisoryLevel)Enum.Parse(typeof(SupervisoryLevel), pieces[1]),
                         double.Parse(pieces[2]));
         }
+        
+        // The TryParse() method will receive a string AND output an instance of Employment as an output parameter 
+        // syntax of a .TryParse: xxxx.TryParse(string, out receivingVariable)
+        //          int example   int.TryParse(inputData, out myIntegerNumber)
+        // xxxx can be any datatype 
+        // can xxxx be a class; yes; a class is a developer defined datatype
+        // the method will return a boolean value indicating if the action with the method was successful 
+        // the action within the method will be to call the .Parse() method. 
+        // this is the same concept of Parsing primitive datatypes already in C# 
+        
+        public static bool TryParse(string text, out Employment result)
+        {
+            // why the value null? 
+            // the default value for any class instance (the object) is null 
+            result = null;
+            bool valid = false;
+            try
+            {
+                // Action: try to parse the string using .Parse()
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    throw new ArgumentNullException("Parsing string is empty");
+                }
+                result = Parse(text);
+                valid = true;
+            }
+            catch (FormatException ex)
+            {
+                // DO NOT print out the error
+                // INSTEAD, re-throw the exception 
+                // think of this as a relay race, passing the baton (exception)
+                // this method DOES NOT actually handle the display of the error
+                // the display of an error message is done by the driver routine (in our case is the code in Program.cs)
+                throw new FormatException(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                throw new ArgumentOutOfRangeException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // handle any other unexpected error 
+                throw new Exception($"TryParse Employment unexpected error: {ex.Message} ");
+            }
+            return valid;
+        }
     }
 }
