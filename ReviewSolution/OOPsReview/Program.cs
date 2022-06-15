@@ -1,5 +1,6 @@
 ﻿// using the "using statement" means that one does NOT need to fully qualify on EACH usage of the class
 using OOPsReview.Data;
+using System.Text.Json;
 //this class is by default in the namespace of the project: OOPsReview 
 
 // fully qualified data member
@@ -85,15 +86,39 @@ else
 
 // File I/O
 // Writing a comma separated value file
-string pathname = WriteCSVFile();
+//string pathname = WriteCSVFile();
 
 // Read a comma separated value file
-// we wil be using ReadAllLines(pathname); returns an array of strings. Each array element is one line in your csv file
-//List<Employment> jobs = ReadCSVFile(path);
 
+// we wil be using ReadAllLines(pathname); returns an array of strings. Each array element is one line in your csv file
+const string PATHNAME = "../../../Employment.csv";
+const string JSONPATHNAME = "../../../Employment.json";
+List<Employment> jobs = ReadCSVFile(PATHNAME);
+Console.WriteLine($"\nResults of reading the CSV file at : {PATHNAME}");
+foreach (var job in jobs)
+{
+    Console.WriteLine($"Title: {job.Title} Level: {job.Level} Year: {job.Years}");
+}
+
+Console.WriteLine(jobs.Count);
 // Writing a a JSON file
+// me is built above 
+SaveAsJson(me, JSONPATHNAME);
 
 // Read a JSON file
+Person jsonMe = ReadAsJson(JSONPATHNAME);
+Console.WriteLine("\nOutput from reading a json file");
+
+Console.WriteLine($"{jsonMe.FirstName} {jsonMe.LastName} lives at {jsonMe.Address.ToString()} having a job count of {jsonMe.NumberOfPositions}");
+Console.WriteLine($"Jobs: output via for loop\n");
+foreach (var item in jsonMe.EmploymentPositions)
+{
+    if(item.Years > 0)
+    {
+        Console.WriteLine(item.ToString());
+    }
+}
+Console.WriteLine("\nJobs: output via for loop\n");
 
 void CreateJob(ref Employment job)
 {
@@ -157,6 +182,61 @@ Person CreatePerson(Employment job, ResidentAddress address)
     return me;
 }
 
+List<Employment> ReadCSVFile(string pathname)
+{
+    List<Employment> jobs = new();
+    // this try/catch error handling is for system I/O errors while reading the file
+    try
+    {
+        //List<string> fileLines = new();
+        // use this variable repeatedly to hold a new instance of Employment as I read and Parse the CSV file 
+        Employment job = null;
+        // read the CSV file using File.ReadAllLines(), this no need to create a StreamReader. ReadAllLines returns an array of strings, each string representing one line in your CSV file
+        foreach (string line in File.ReadAllLines(pathname))
+        {
+            // as you process each line, we will use the TryParse of Employment. 
+            // this will return an instance of Employment IF the data is valid 
+            // If the data is NOT valid, Employment will throw various errors
+            // we DO NOT want to stop processing the strings IF an error is discovered
+            // THEREFORE we WILL have a try/catch WITHIN this loop 
+            try
+            {
+                // attempt to convert a comma separated value string into an instance of Employment (parse the data)
+                if (Employment.TryParse(line, out job))
+                {
+                    jobs.Add(job);
+                }
+                // testing if the parsing was successful, the way this logic is set up, the testing is unnecessary. If the parse fails, an error would have been trown, thus processing will have jumped to a catch in the tryParse
+                // Consider that on a successful parse you may have additional (complex) logic to perform. 
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Format error: {ex.Message}");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($"Argument error: {ex.Message}");
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"Out of range error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unknown exception error: {ex.Message}");
+            }
+        }
+    }
+    catch(IOException ex)
+    {
+        Console.WriteLine($"Reading CSV file error: {ex.Message}");
+    }
+    catch(Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+    return jobs;
+}
 string WriteCSVFile()
 {
     string pathname = "";
@@ -196,4 +276,49 @@ string WriteCSVFile()
         Console.WriteLine(ex.Message);
     }
     return Path.GetFullPath(pathname);
+}
+
+void SaveAsJson(Person me, string pathname)
+{
+    // the term used to read and write Json files is Serialization
+    // the classes use are referred to as serializers 
+    // with writing we can make the file produce more readable format by using indentaition
+    // Json is very good at using objects and properties, however, it needs help/prompting to work better with fields: option IncludeFields
+    // the term Serialize is generally used to indicate writing 
+    // instance instantiation 
+    JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        IncludeFields = true
+    };
+    try
+    {
+        // Serialize the instance of Person 
+        // Produce a string of serialized data 
+        string jsonstring = JsonSerializer.Serialize<Person>(me, options);
+        // output the json string to your file indicated in the path
+        // use WriteAllText here becuase there is ONLY a SINGLE line of text unlike writing a csv file which has an array of strings (WriteAllLines)
+        File.WriteAllText(pathname, jsonstring);
+    }
+    catch(Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}
+
+Person ReadAsJson(string pathname)
+{
+    Person person = null;
+    try
+    {
+        // bring in the text from the file 
+        string jsonstring = File.ReadAllText(pathname);
+        // use the deserializer to unpack the json string into the expected structure <Person> 
+        person = JsonSerializer.Deserialize<Person>(jsonstring);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+    return person;
 }

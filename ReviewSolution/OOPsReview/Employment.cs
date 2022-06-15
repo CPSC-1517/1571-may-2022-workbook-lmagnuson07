@@ -167,7 +167,7 @@ namespace OOPsReview.Data
         // behaviours can be private (for use by the class only); public (for use by the outside user)
         // all rules about methods are in effect 
 
-        // a special method may be placed may be placed in your class to reflect the data stored by the instance (object) based on this class definiton
+        // a special method may be placed may in your class to reflect the data stored by the instance (object) based on this class definiton
         // this method is part of the system software and can be overriden by your own version of the method
 
         public override string ToString()
