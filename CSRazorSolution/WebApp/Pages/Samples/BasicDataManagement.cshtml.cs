@@ -12,12 +12,14 @@ namespace WebApp.Pages.Samples
         public int Num { get; set; }
         [BindProperty]
         public string MassText { get; set; }
+        [BindProperty]
+        public int FavoriteCourse { get; set; }
         public string Feedback { get; set; }
         public void OnGet()
         {
             if (Num == 0)
             {
-                Feedback = "executing the OnGet method for the Get request";
+                Feedback = "Executing the OnGet method for the Get request";
             }
             else
             {
@@ -26,8 +28,12 @@ namespace WebApp.Pages.Samples
         }
         public void OnPost()
         {
+            if (Num == 0)
+            {
+                Feedback = "Executing the OnPost method for a value of zero";
+            }
             Feedback = $"You entered the value {Num} displayed by OnPost\n" + 
-                $"your mass text is {MassText}";
+                $" your mass text is \"{MassText}\" and I like the {FavoriteCourse} course.";
         }
     }
 }

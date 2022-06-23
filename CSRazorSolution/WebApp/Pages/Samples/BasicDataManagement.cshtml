@@ -24,6 +24,23 @@
 			has various types of acceptable inputs (type="")
 			can tie the control to a property on the ModelPage directly 
 				by using the helper tag asp-for="propertyname"
+			can be a self-closing tag (<xxxx .... />)
+
+	<textarea> used to accept input from the page user used to accept large amounts of text 
+			information generally entered as a set of lines, or one long continuous string
+			can set the rows="x" for the vertical height and col="x" for the horizontal number of
+			characters per line
+			requires a paired set of tags (<xxxx ....></xxxx>)
+
+	<select>/<option> use to display a list of choices to the page user from which to select
+			other names: combobox, dropdownlist, selectlist. this control can have an optional
+			"prompt line" which sets as the first line in the list of choices
+			the control requires a paired set of tags <select></select>
+			The choice lines whithin the control are created using the paired set of tags called 
+			<option></option> each line in the list is a set of option tags 
+			this control can be "hard-coded" with choices
+			this control can be genereated dynamically using a data collection (List<T>) from a database 
+			<option value="returndatavalue"> displayed text </option>
 
 	<button> three types
 			submit: sends the form to the server for processing 
@@ -41,6 +58,16 @@
 		<textarea asp-for="MassText" rows="5" cols="100">
 
 		</textarea>
+	</label>
+	<label>
+		Select a favorite course from the dropdown list
+		<select asp-for="FavoriteCourse"> 
+			<option value="0">Select ...</option>
+			<option value="1008">COMP1008</option>
+			<option value="1012">CPSC1012</option>
+			<option value="1017">COMP1017</option>
+			<option value="1517">CPSC1517</option>
+		</select>
 	</label>
 	<button type="submit" id="jsIdentifier" name="RequestObjectIdentifier">
 		Press Me A (submit form) 
