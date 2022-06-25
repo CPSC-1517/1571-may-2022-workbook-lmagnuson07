@@ -15,6 +15,7 @@ namespace WebApp.Pages.Samples
         [BindProperty]
         public int FavoriteCourse { get; set; }
         public string Feedback { get; set; }
+        public string ErrorMsg { get; set; }
         public void OnGet()
         {
             if (Num == 0)
@@ -32,8 +33,23 @@ namespace WebApp.Pages.Samples
             {
                 Feedback = "Executing the OnPost method for a value of zero";
             }
-            Feedback = $"You entered the value {Num} displayed by OnPost\n" + 
-                $" your mass text is \"{MassText}\" and I like the {FavoriteCourse} course.";
+            else
+            {
+                Feedback = $"You entered the value {Num} displayed by OnPost\n" +
+                                $" your mass text is \"{MassText}\" and I like the {FavoriteCourse} course.";
+            }
+        }
+        public void OnPostSecondButton()
+        {
+            if (Num == 0)
+            {
+                Feedback = "Executing the OnPostSecondButton method for a value of zero";
+            }
+            else
+            {
+                Feedback = $"You entered the value {Num} displayed by OnPostSecondButton\n" +
+                                $" your mass text is \"{MassText}\" and I like the {FavoriteCourse} course.";
+            }
         }
     }
 }

@@ -70,7 +70,10 @@
 		</select>
 	</label>
 	<button type="submit" id="jsIdentifier" name="RequestObjectIdentifier">
-		Press Me A (submit form) 
+		Press Me (submit form to default OnPost) 
+	</button>
+	<button type="submit" asp-page-handler="SecondButton">
+		Press You (submit form to specified OnPostSecondButton) 
 	</button>
 </form>
 @Model.Feedback
