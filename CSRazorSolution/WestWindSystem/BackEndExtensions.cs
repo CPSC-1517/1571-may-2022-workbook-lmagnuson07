@@ -38,6 +38,18 @@ namespace WestWindSystem
                 // create an instance of the service class (BuildVersionServices) supplying the context reference to the service class 
                 return new BuildVersionServices(context);
             });
+            services.AddTransient<RegionServices>((serviceProvider) =>
+            {
+                var context = serviceProvider.GetService<WestWindContext>();
+
+                return new RegionServices(context);
+            });
+            services.AddTransient<TerritoryServices>((serviceProvider) =>
+            {
+                var context = serviceProvider.GetService<WestWindContext>();
+
+                return new TerritoryServices(context);
+            });
         }
     }
 }
